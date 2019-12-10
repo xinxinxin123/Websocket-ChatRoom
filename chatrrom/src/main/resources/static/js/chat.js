@@ -90,7 +90,7 @@ function say(msg) {
 	var obj = JSON.parse(msg); 
 	
 	//1.普通类型的json 代表后台推送的一条消息
-	if("{" == firstChar){
+	if(!$.isArray(obj)){
 		//1.1 普通消息
 		if(obj.messageType == 1){
 			
@@ -212,7 +212,10 @@ function say(msg) {
 		}
 	}
 	//2.数组类型的json、在线用户列表或者消息记录
-	else if("[" == firstChar){
+	else if($.isArray(obj)){
+		if (obj.length < 1) {
+			return;
+		}
 		//2.1.接受的json串为历史记录
 		if(obj[0].messageType == 4){
 			//对消息类型的处理
