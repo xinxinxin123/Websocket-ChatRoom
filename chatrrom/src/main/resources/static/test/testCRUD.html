@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!--引入jquery-->
+<script type="text/javascript" src="js/jquery.js"></script>
+</head>
+<body>
+	<button onclick="selectAll()">获取所有数据</button>
+	<button onclick="insertOne()">插入一条数据</button>
+	<button onclick="updateOne()">更新一条数据</button>
+	<script type="text/javascript">
+	
+		var obj = {
+		    "content": "测试插入数据",
+		    "staffId": 1,
+		    "createdDt": "Jan 13, 2016 10:32:27 AM",
+		    "type": "N"
+			};
+			
+			
+		var obj2 = {
+			"id": 600,
+		    "content": "我把数据更新了",
+		    "staffId": 1,
+		    "createdDt": "Jan 13, 2016 10:32:27 AM",
+		    "type": "N"
+		};
+			
+		//获取数据
+		function selectAll(){
+			$.ajax({
+				type:"get",
+				//请求servlet的url
+				url:"CRUDServlet?tag=select",
+				async:true,
+				//获取执行成功后的数据
+				success:function(data){
+					alert(data);
+				}
+			});
+		}
+		
+		
+		function insertOne(){
+			$.ajax({
+				type:"post",
+				//请求servlet的url
+				url:"CRUDServlet?tag=insert",
+				data:obj,
+				dataType:'json',
+				async:true,
+				//获取执行成功后的数据
+				success:function(data){
+					alert(data);
+				}
+			});
+		}
+		
+		function updateOne(){
+			$.ajax({
+				type:"post",
+				//请求servlet的url
+				url:"CRUDServlet?tag=update",
+				data:obj2,
+				dataType:'json',
+				async:true,
+				//获取执行成功后的数据
+				success:function(data){
+					alert(data);
+				}
+			});
+		}
+	</script>
+</body>
+</html>

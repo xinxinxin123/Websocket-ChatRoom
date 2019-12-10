@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>修改用户</title>
+<script type="text/javascript" src="../../js/jquery.js"></script>
+<style type="text/css">
+    .td_style{
+	    text-align: right;
+	}
+</style>
+</head>
+<body>
+	
+   	   <table >
+   	   	   <caption style="color: #808080;font-size: 30px">修改用户信息</caption>
+   	   	   <tr>
+   	   	   	   <td class="td_style">工号：</td>
+   	   	   	   <td><input type="text" name="code" id="code"
+   	   	   	   onfocus="txtFocus(this)" onblur="txtBlur(this)"></td>
+   	   	   </tr>
+   	   	   <tr>
+   	   	   	   <td class="td_style">姓名：</td>
+   	   	   	   <td><input type="text" name="username" id="username" ></td>
+   	   	   </tr>
+   	   	   <tr>
+   	   	   	   <td class="td_style">密码：</td>
+   	   	   	   <td><input type="password" name="pwd" id="pwd" ></td>
+   	   	   </tr>
+   	   	   <tr>
+   	   	   	   <td class="td_style">当前状态：</td>
+   	   	   	   <td>
+   	   	   	       <select name="state" id="state">
+   	   	   	   	   	   <option>在用</option>
+   	   	   	   	   	   <option>停用</option>
+   	   	   	   	   	   <option>禁言</option>
+   	   	   	       </select>
+   	   	   	   </td>
+   	   	   </tr>
+   	   	   <tr>
+   	   	   	   <td class="td_style">是否为管理员：</td>
+   	   	   	   <td>
+					<select name="isAdminister" id="isAdminister">
+   	   	   	   	       <option>Normal</option>
+   	   	   	   	   	   <option>Super</option>
+   	   	   	   	   	   
+   	   	   	       </select>
+			   </td>
+   	   	   </tr>
+   	   </table>
+   	   <button onclick="insertPerson()" style="position: absolute;left:100px;">确认</button>
+   	   <!-- <input style="position: absolute;left:200px;" type = "reset" value="重置" /> -->
+   <script type="text/javascript">
+	//var staff = {"id":"1","name":"sunny","code":"3","pwd":"123","state":"在用","isAdminister":"N"};
+	var staff;
+	var staff_id;
+    function insertPerson(){
+    	 var code = document.getElementById("code").value;
+  	  	 var username = document.getElementById("username").value;
+  		 var pwd = document.getElementById("pwd").value;
+  		 var state = document.getElementById("state").selectedIndex;
+  		if(state==0){
+			 state="A";
+		 }else if(state==1){
+			 state="I";
+		 }else if(state==2){
+			 state="x";
+		 }
+  		 var isAdminister = document.getElementById("isAdminister").selectedIndex;
+  		if(isAdminister==0){
+			 isAdminister="N";
+		 }else if(isAdminister==1){
+			 isAdminister="S";
+		 }
+  	   	 var obj = {
+  	   			 "id":staff_id,
+  	   			 "code":code,
+  	   			 "username":username,
+  	   			 "pwd":pwd,
+  	   			 "state":state,
+  	   			 "isAdminister":isAdminister
+  	   	 }
+    	$.ajax({
+ 			type:"post",
+ 			//请求servlet的url
+ 			data:obj,
+ 			url:"../../manageServlet?tag=modify",
+ 			async:true,
+ 			//获取执行成功后的数据
+ 			complete:function(data){
+ 				alert("更新成功！");
+ 				self.location.href="../detail/showPersonDetail.html";
+ 				//这里要考虑防盗链的问题
+ 			}
+ 			});
+    }
+    
+	window.onload = function(){
+		var url = location.search; //获取url中"?"符后的字串
+		//alert(url);  url=?id=2
+		 if (url.indexOf("?") != -1) {
+
+		     var str = url.substr(1); //从第一个开始截，不包含第一个
+			//  alert(str); str是id=2
+		     staff_id = str.substr(3);
+			//alert(staff_id);
+		 }
+		//alert("你将修改"+staff_id+"号员工的信息！");
+		$.ajax({
+ 			type:"post",
+ 			//请求servlet的url
+ 			data:{"staff_id":staff_id},
+ 			url:"../../manageServlet?tag=selectOne",
+ 			async:true,
+ 			//获取执行成功后的数据
+ 			success:function(data){
+ 				staff = eval("("+data+")");
+ 				document.getElementById("code").value = staff.code ;
+ 				document.getElementById("username").value = staff.name ;
+ 				document.getElementById("pwd").value = staff.pwd ;
+ 			}
+ 			});
+		
+		//alert(staff.name);
+		
+		
+		
+		
+		$("#code").focus(function() {
+			$("#code").css("background-color", "#F5F5F5");
+		});
+		$("#username").focus(function() {
+			$("#username").css("background-color", "#F5F5F5");
+		});
+		$("#pwd").focus(function() {
+			$("#pwd").css("background-color", "#F5F5F5");
+		});
+		$("#state").focus(function() {
+			$("#state").css("background-color", "#F5F5F5");
+		});
+		$("#isAdminister").focus(function() {
+			$("#isAdminister").css("background-color", "#F5F5F5");
+		});
+		//离开焦点
+		$("#code").blur(function() {
+			$("#code").css("background-color","#D6D6FF");
+		});
+		$("#username").blur(function() {
+			$("#username").css("background-color","#D6D6FF");
+		});
+		$("#pwd").blur(function() {
+			$("#pwd").css("background-color","#D6D6FF");
+		});
+		$("#state").blur(function() {
+			$("#state").css("background-color","#D6D6FF");
+		});
+		
+		$("#isAdminister").blur(function() {
+			$("#isAdminister").css("background-color","#D6D6FF");
+		});
+	}
+	
+</script>
+</body>
+</html>

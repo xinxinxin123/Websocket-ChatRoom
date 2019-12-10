@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="per.xin.chatroom.mapper.SharedFileMapper" >
+  <resultMap id="BaseResultMap" type="per.xin.chatroom.entity.SharedFile" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="UPLOADER" property="uploader" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="FILE_TYPE" property="fileType" jdbcType="VARCHAR" />
+    <result column="FORE_NAME" property="foreName" jdbcType="VARCHAR" />
+    <result column="BACK_NAME" property="backName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, UPLOADER, CREATE_DATE, FILE_TYPE, FORE_NAME, BACK_NAME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from shared_file
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from shared_file
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="per.xin.chatroom.entity.SharedFile" >
+    insert into shared_file (ID, UPLOADER, CREATE_DATE, 
+      FILE_TYPE, FORE_NAME, BACK_NAME
+      )
+    values (#{id,jdbcType=INTEGER}, #{uploader,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{fileType,jdbcType=VARCHAR}, #{foreName,jdbcType=VARCHAR}, #{backName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="per.xin.chatroom.entity.SharedFile" >
+    insert into shared_file
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="uploader != null" >
+        UPLOADER,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="fileType != null" >
+        FILE_TYPE,
+      </if>
+      <if test="foreName != null" >
+        FORE_NAME,
+      </if>
+      <if test="backName != null" >
+        BACK_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="uploader != null" >
+        #{uploader,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fileType != null" >
+        #{fileType,jdbcType=VARCHAR},
+      </if>
+      <if test="foreName != null" >
+        #{foreName,jdbcType=VARCHAR},
+      </if>
+      <if test="backName != null" >
+        #{backName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="per.xin.chatroom.entity.SharedFile" >
+    update shared_file
+    <set >
+      <if test="uploader != null" >
+        UPLOADER = #{uploader,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fileType != null" >
+        FILE_TYPE = #{fileType,jdbcType=VARCHAR},
+      </if>
+      <if test="foreName != null" >
+        FORE_NAME = #{foreName,jdbcType=VARCHAR},
+      </if>
+      <if test="backName != null" >
+        BACK_NAME = #{backName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="per.xin.chatroom.entity.SharedFile" >
+    update shared_file
+    set UPLOADER = #{uploader,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      FILE_TYPE = #{fileType,jdbcType=VARCHAR},
+      FORE_NAME = #{foreName,jdbcType=VARCHAR},
+      BACK_NAME = #{backName,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from shared_file
+    where 1 = 1
+  </select>
+</mapper>

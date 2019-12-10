@@ -1,0 +1,161 @@
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<script type="text/javascript" src="../js/jquery.js"></script>
+		<script type="text/javascript" src="../js/ajaxfileupload.js"></script>
+		<link type="text/css" href="../css/bootstrap.min.css" />
+		<title></title>
+		<style type="text/css">
+			#img{
+				width: 100px;
+				height: auto;
+			}
+			.file1 {
+			    position: relative;
+			    display: inline-block;
+			    background: #D0EEFF;
+			    border: 1px solid #99D3F5;
+			    border-radius: 4px;
+			    padding: 4px 12px;
+			    overflow: hidden;
+			    color: #1E88C7;
+			    text-decoration: none;
+			    text-indent: 0;
+			    line-height: 10px;
+			}
+			.file1 input {
+			    position: absolute;
+			    font-size: 100px;
+			    right: 0;
+			    top: 0;
+			    opacity: 0;
+			}
+			.file1:hover {
+			    background: #AADFFD;
+			    border-color: #78C3F3;
+			    color: #004974;
+			    text-decoration: none;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<script type="text/javascript">
+			$(function() {
+				//获取所有文件
+				
+				
+				
+				//上传图片
+				$("#btnUpload").click(function() {
+					
+					//获取文件类型
+					var file = $("#file");
+					
+					ajaxFileUpload("uploadFile","liyuxin");
+					/* if(isImage(file) != -1){
+					}else{
+						alert("请选择图片");
+					} */
+				});
+			});
+
+			function ajaxFileUpload(action_type,staff_name) {
+			 	// 开始上传文件时显示一个图片
+				var elementIds = ["flag"]; //flag为id、name属性名
+				$.ajaxFileUpload({
+					url: "../upload?"+"action_type="+action_type+"&staff_name="+staff_name,
+				//	type: 'post',
+					secureuri: false, //一般设置为false
+					fileElementId: 'file', // 上传文件的id、name属性名
+					dataType: 'json', //返回值类型
+					//elementIds: elementIds, //传递参数到服务器
+				
+					success: function(data, status) {
+						var res = data.split("<pre>");
+						res = res[1].split("</pre>")
+						res = res[0];
+						$("#img").append("<img id=\"img\" src=" +"../"+res+ " />");
+					},
+					error: function(data, status, e) {
+						alert(data);
+					}
+				}); 
+				
+				
+			}
+			
+			//通过文件判断是否为图片
+			function isImage(file){
+				var filename = file[0].value;
+				var fileType = filename.substring(filename.lastIndexOf("."));
+				var imageType =[".jpg",".png",".jif",".jpeg"]; 
+				return $.inArray(fileType,imageType);
+			}
+			
+			
+			//下载文件的点击事件
+			function downFile(file_tag){
+				alert("downLoad");
+				$.ajax({
+					url : "../download?filename="+file_tag,
+					type:"get",
+					success:function(data){
+						alert(data);
+						$("#img").append("<img id=\"img\" src=" +"../"+res+ " />");
+					}
+				});
+			}
+			
+			//加载所有文件
+			function loadFiles(){
+				$.ajax({
+					type:"get",
+					url:"../fileList",
+					async:true,
+					success:function(data){
+						alert(data);
+						var obj = JSON.parse(data);
+						var res = undefined;
+						for(i in obj ){
+							var res = res + "<p>"+ obj[i].foreName +"<a href=\"../download?fileId="+ obj[i].id+  "\">图片</a></p>";
+						}
+						$("#img").append(res);
+					}
+				});
+			}
+		</script>
+		<div id="img">image</div>
+		<img src="../head2.png" width="100px" height="auto" />
+		
+		<div class="file1">图片
+    	      <input type="file" name="file" id="file">
+		</div>
+		
+		
+		<!-- <input type="file" id="file" name="file"> -->
+		<br/>
+		<input type="hidden" id="flag" name="flag" value="ajax文件上传" />
+		<input type="button" id="btnUpload" value="上传图片" />
+		
+		<div >
+			<tr> 
+				<img src="tar.png" id="1" name="1"/> 
+				upload.zip
+				<button class="btn-group-lg" onclick="downFile(11)">下载</button>
+			</tr>
+			<tr>
+				<img src="../emoj/images/face/15.gif" name="upload1.zip"  />
+			
+			</tr>
+		</div>
+		-------------------------------------------------------------------------<p></p>
+		<button onclick="loadFiles()">加载文件</button>
+		
+		<p>文件名<a href="http://localhost:8080/SmartChat/download?fileId=22">图片</a></p>
+		<p>文件名<a href="../download?fileId=22">图片</a></p>
+	</body>
+
+</html>

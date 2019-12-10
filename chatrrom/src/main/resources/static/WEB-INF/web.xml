@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+
+  <welcome-file-list>
+    <welcome-file>chat.html</welcome-file>
+  </welcome-file-list>
+
+
+  <servlet>
+    <description>Initialization</description>
+    <display-name>InitServlet</display-name>
+    <servlet-name>InitServlet</servlet-name>
+    <servlet-class>com.zte.smartchat.action.InitServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>InitServlet</servlet-name>
+    <url-pattern></url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>QueryMessages</servlet-name>
+    <servlet-class>com.zte.smartchat.action.QueryMessages</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>QueryMessages</servlet-name>
+    <url-pattern>/AServlet</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ManageServlet</servlet-name>
+    <servlet-class>com.zte.smartchat.action.ManageServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageServlet</servlet-name>
+    <url-pattern>/manageServlet</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
+    <servlet-name>uploadServlet</servlet-name>
+    <servlet-class>com.zte.smartchat.action.UploadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>uploadServlet</servlet-name>
+    <url-pattern>/upload</url-pattern>
+  </servlet-mapping>
+</web-app>

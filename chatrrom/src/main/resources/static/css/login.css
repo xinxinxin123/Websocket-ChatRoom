@@ -1,0 +1,37 @@
+#login {
+	background-clip: padding-box;
+	background: rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 0 0 13px 3px rgba(0, 0, 0, .5);
+	-webkit-box-shadow: 0 0 13px 3px rgba(0, 0, 0, .5);
+	box-shadow: 0 0 13px 3px rgba(0, 0, 0, .5);
+	overflow: hidden;
+}
+
+
+body {
+	padding-top: 110px;
+	background-image: url(../img/suolong2.jfif);
+}
+
+.form-signin {
+	float: center;
+	max-width: 210px;
+	padding: 25px 45px 40px;
+	margin: 0 auto 20px;
+}
+
+.form-signin input[type="text"],.form-signin input[type="password"] {
+	font-size: 16px;
+	width: 180px;
+	height: 30px;
+	margin-bottom: 10px;
+	padding: 7px 15px;
+}
+
+h2 {
+	font-family: Cursive;
+	font-weight: bold;
+	color: #DDDDDD;
+}
+
+

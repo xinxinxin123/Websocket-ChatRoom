@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>展示所有消息</title>
+<script type="text/javascript" src="../../js/jquery.js"></script>
+<link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+<script type="text/javascript" src="../../js/jquery-1.4.min.js"></script>
+<script type="text/javascript">
+	var $jq = $.noConflict(true);
+</script>
+<link href="../../emoj/smohan.face.css" type="text/css" rel="stylesheet"/>
+<script src="../../emoj/smohan.face.js" charset="utf-8"></script>
+<style type="text/css">
+	tr{
+  		text-align: center;
+  		
+  		
+  	}
+  	table {
+		border-style: solid;
+		border-width: 1px;
+		border-color: black;
+    }
+    
+    td{
+        border-top-style: solid;
+		border-top-width: 1px;
+		border-top-color: #B0C4DE;
+		
+        border-bottom-style: solid;
+		border-bottom-width: 1px;
+		border-bottom-color: #B0C4DE;
+		
+		border-left-style: solid;
+		border-left-width: 1px;
+		border-left-color: #B0C4DE;
+		
+		border-right-style: solid;
+		border-right-width: 1px;
+		border-right-color: #B0C4DE;
+
+    
+    }
+    
+ 
+    button{
+    	
+    	position: relative;
+    	left: 60px;
+    	right: 30px;
+    }
+  
+	</style>
+
+
+</head>
+<body>
+	<script type="text/javascript">
+		var messages;
+		var messages_id = [];
+		var f;
+		var k;
+		//var array=new array();
+	    window.onload = function(){
+	    	$.ajax({
+	 			type:"post",
+	 			//请求servlet的url
+	 			url:"../../manageServlet?tag=allMessage",
+	 			async:true,
+	 			//获取执行成功后的数据
+	 			complete:function(data){
+	 				messages = eval("("+data.responseText+")");
+	 				f = Math.ceil(messages.length/8);
+	 				var e = $(".pagination");
+					e.empty();
+					e.append("<ul><li><a href='#' onclick='show(-1)'><</a></li></ul>");
+					for(var i=1;i<=f;i++){
+						e.append("<ul><li><a href='#' onclick='show("+ i +")'>"+ i +"</a></li></ul>");
+					}
+					e.append("<ul><li><a href='#' onclick='show(0)'>></a></li></ul>");
+	 				show(1);
+	 			}
+	 		});
+		}
+	    function show(g){
+	    	var h = $(".xianshi");
+			h.empty();
+	    	var d = "";
+	    	if(-1==g){
+	    		g=k-1;
+	    		if(0 == g){
+					//alert("已到首页！");
+					g = 1;
+				}
+	    	}else if(0==g){
+	    		g=k+1;
+	    		if(f+1==g){
+	    			//alert("已到末页！");
+	    			g=f;
+	    		}
+	    	}
+	    	if(g<f){
+		    	for(var i=8*(g-1);i<8*g;i++){
+		    		d += "<tr class="+ messages[i].id +" ondblclick=" + "\"pass(" + messages[i].id +")\"  onclick =" + "\"change2White(" + messages[i].id +")\" ><td>" 
+						+  messages[i].createdDt + "</td><td>" + messages[i].staffName + "</td><td class=\"amessage\" id=\"emoji"+i+"\"><pre class=\"prettyprint\">"+messages[i].content+"</pre></td></tr>";
+		    		//$jq("#emoji"+i).replaceface($("#emoji"+i).html());
+		    	}
+				$("tbody").append(d);
+	    	}else if(g==f){
+	    		for(var i=8*(f-1);i<=messages.length;i++){
+	    			d += "<tr class="+ messages[i].id +" ondblclick=" + "\"pass(" + messages[i].id +")\"  onclick =" + "\"change2White(" + messages[i].id +")\" ><td>" 
+						+  messages[i].createdDt + "</td><td>" + messages[i].staffName + "</td><td class=\"amessage\" id=\"emoji"+i+"\"><pre class=\"prettyprint\">"+messages[i].content+"</pre></td></tr>";
+	    		//$jq("#emoji"+i).replaceface($("#emoji"+i).html());
+		    	}
+	    		$("tbody").append(d);
+	    	}
+	    	k=g;
+	    }
+	    function pass(num){
+  			$("."+num).css("background-color", "#D6D6FF");
+  			messages_id.push(num);
+  			//alert(messages_id);
+  			//var x = messages_id.length;
+			//alert(x);	
+  		}
+	  //行双击后取消  变为白色
+  		function change2White(num){
+  			$("."+num).css("background-color", "#FFFFFF");
+  			for(var i in messages_id){
+  				if(num==messages_id[i]){
+  					removeElement(i,messages_id);
+  				}
+  			}
+  		}
+  		function removeElement(index,array){
+	  		 if(index>=0 && index<array.length-1)
+	  		 {
+	  		  for(var i in array){
+	  			array[i] = array[i+1];
+	  		  }
+	  		  array.length = array.length-1;
+	  		 }//else if(index==array.length-1){
+	  			//array.length = array.length-1;
+	  		 //} 
+	  		 return array;
+	  	}
+	  
+	  	function deleteMessage() {
+			if(0!=messages_id.length){
+				//alert(messages_id);
+				//alert("确定删除该条聊天记录吗?");//给alert（）增加一个返回的选项。
+				//message_id 为所要删除的员工id
+				$.ajax({
+	 			type:"post",
+	 			//请求servlet的url
+	 			data:{"messages_id":messages_id}, 
+	 			url:"../../manageServlet?tag=deleteMessages",
+	 			async:true,
+	 			//获取执行成功后的数据
+	 			complete:function(data){
+	 				alert("删除成功！");
+				    window.location.reload(); 
+	 			}
+	 			});
+			}else{
+				alert("请您选择一条记录后再删除！");
+			}
+			
+		}
+	</script>
+	<div>
+		
+	 <div><form id="form"><div id = "page"></div></form><div class="pagination"></div></div>
+	 <table width="950px" align="center">
+            <!-- <caption>当前消息列表</caption> -->
+			
+     		<thead>
+     			<!-- 表头 -->
+     			<tr>
+     				<th width="100px">时间</th>
+     				<th width="50px">发信人</th>
+     				<th>消息内容</th>
+     			</tr>
+     		</thead>
+     		
+     		
+     		<tbody class="xianshi">
+     			<!-- 展现的所有聊天信息  -->
+     			<!--  
+     		    <tr>
+     				<td>2015-4-4</td>
+     				<td>haha</td>
+     				<td>的hi昏昏沉沉对此veer两节课</td>
+     			</tr>
+     			-->
+     		</tbody>
+                  
+     </table>
+     </div>
+     <button onclick="deleteMessage()" style="position: absolute;left:35px;">删除</button>
+     <!-- 隐藏按钮 显示id -->
+     <!-- <label id="hiddenLabel" style="display:none" ></label> -->
+</body>
+</html>
