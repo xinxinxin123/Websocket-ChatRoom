@@ -9,6 +9,7 @@ import java.util.Map;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,8 +21,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import per.xin.chatroom.entity.CommonResponse;
 import per.xin.chatroom.entity.Staff;
 import per.xin.chatroom.entity.dto.LoginReq;
+import per.xin.chatroom.exception.BaseAppException;
 import per.xin.chatroom.service.IStaffSV;
 import per.xin.chatroom.util.MD5Util;
 
@@ -37,7 +40,7 @@ public class LoginController{
 
 
 	@PostMapping(value = "/login")
-	public String loginIn(@RequestBody LoginReq loginReq, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+	public CommonResponse loginIn(@RequestBody LoginReq loginReq, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
 
 		String code = loginReq.getUsername();
 		String pwd = loginReq.getPassword();
@@ -45,7 +48,7 @@ public class LoginController{
 		Staff staff = staffSV.getStaff(code);
 
 		if(null == staff){
-			return "用户不存在";
+			throw new BaseAppException("SYS-LOGIN-0002", "用户不存在");
 		}
 		else{
 			String md5Pwd = MD5Util.getMD5Str(staff.getPwd(), null);
@@ -58,17 +61,16 @@ public class LoginController{
 					Cookie username = new Cookie("username", URLEncoder.encode(staff.getName(), "utf-8"));
 					username.setPath("/SmartChat");
 					response.addCookie(username);
-					return "ok";
+					return new CommonResponse("1", "success");
 				}else if(staff.getState().equalsIgnoreCase("I")){
-					return "很抱歉，您的账号已被禁用，请联系管理员";
+					throw new BaseAppException("SYS-LOGIN-0003", "很抱歉，您的账号已被禁用，请联系管理员");
 				}
 				else {
-					return "ok";
+					return new CommonResponse("1", "success");
 				}
-
 			}
 			else{
-				return "用户名或密码不匹配";
+				throw new BaseAppException("SYS-LOGIN-0004", "用户名或密码不匹配");
 			}
 		}
 
@@ -104,12 +106,16 @@ public class LoginController{
 
 
 	@PostMapping(value = "/updateHead")
-	public void uploadHead(@RequestBody Staff staff) {
-		staffSV.updateHead(staff); //TODO 异常处理
+	public CommonResponse uploadHead(@RequestBody Staff staff) {
+		if (null == staff || StringUtils.isEmpty(staff.getId()) || StringUtils.isEmpty(staff.getHeadUrl())) {
+			throw new BaseAppException("SYS-HEAD-0001", "入参不正确");
+		}
+		staffSV.updateHead(staff);
+		return new CommonResponse("1", "success");
 	}
 
 	@GetMapping(value = "/updatePwd")
-	public Map<String, String> updatePwd(@RequestParam("staffId") Integer staffId, @RequestParam("pwd_old") String oldPwd,
+	public CommonResponse updatePwd(@RequestParam("staffId") Integer staffId, @RequestParam("pwd_old") String oldPwd,
 						 @RequestParam("pwd_new") String newPwd) {
 
 		Map<String, String> response = new HashMap<>();
@@ -117,11 +123,10 @@ public class LoginController{
 		if (staff.getPwd().equals(oldPwd)) {
 			staff.setPwd(newPwd);
 			staffSV.UpdateStaff(staff);
-			response.put("res", "修改成功，请重新登录");
+			return new CommonResponse("1", "success");
 		}else{
-			response.put("res", "原密码输入错误");
+			throw new BaseAppException("SYS-LOGIN-0001", "原始密码不正确");
 		}
-		return response;
 	}
 
 

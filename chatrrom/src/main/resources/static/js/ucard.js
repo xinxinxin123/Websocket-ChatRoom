@@ -47,8 +47,14 @@ function changeHeadImg() {
         contentType: 'application/json',
 		async:true,
 		data:JSON.stringify(staff),
-		complete:function(data){ //TODO 无论成功或者失败都是调用complete。要改
-			location.reload();
+		success: function(data){
+            if (data && data.errorCode) {
+                $("#div_errormsg2").html("<div class='alert alert-error' onclick='reset()'>"+data.errorMsg+"</div>");
+            }
+            else if (data && data.responseCode == '1'){
+                location.reload();
+            }
+
 		}
 			
 	});
@@ -79,16 +85,16 @@ function changePwd(){
 				async:false,
 				dataType:"json",
 				success:function(data){
-					var res  = data.res;
-					if(res=="原密码输入错误"){
-						$("#div_errormsg2").html("<div class='alert alert-error' onclick='reset()'>"+res+"</div>");
+					if (data && data.errorCode) {
+                        $("#tipsContent").text(data.errorMsg);
+                        $("#tips").modal('show');
 					}
-					else{
-						$('#edit_pwd_success').modal({
-						    backdrop:false,
-						    keyboard:false,
-						    show:true
-						});
+					else if (data && data.responseCode == '1'){
+                        $('#edit_pwd_success').modal({
+                            backdrop:false,
+                            keyboard:false,
+                            show:true
+                        });
 					}
 				},
 			});

@@ -35,12 +35,13 @@ function ajaxLogin(username, password){
         //dataType:'json',
         async:true,
         //获取执行成功后的数据
-        complete:function(data){
-            if(data.response == "ok"){
+        success:function(data){
+            if (data && data.errorCode) {
+                $("#div_errormsg").html("<div class='alert alert-error' onclick='reset()'>"+data.errorMsg+"</div>")
+            }
+            else if (data.responseCode == "1"){
                 var url = "/chat.html";
                 window.location.href = url;
-            }else {
-                $("#div_errormsg").html("<div class='alert alert-error' onclick='reset()'>"+data+"</div>");
             }
         }
     });
