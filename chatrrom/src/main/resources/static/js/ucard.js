@@ -48,7 +48,7 @@ function changeHeadImg() {
 		async:true,
 		data:JSON.stringify(staff),
 		complete:function(data){ //TODO 无论成功或者失败都是调用complete。要改
-			//location.reload();
+			location.reload();
 		}
 			
 	});
