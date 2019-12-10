@@ -4,7 +4,7 @@
 
 **QQ群**：119096066
 
-![](F:\space\Websocket-ChatRoom-SpringBoot\document\qq.png)
+![](.\document\qq.png)
 
 ## 项目演示地址
 
@@ -42,7 +42,7 @@
 
 #### 登陆：
 
-![登陆图片](F:\space\Websocket-ChatRoom-SpringBoot\document\login.jpg)
+![登陆图片](.\document\login.jpg)
 
 
 
@@ -52,32 +52,32 @@
 * 支持发送图片
 * 支持发生表情
 
-![群聊](F:\space\Websocket-ChatRoom-SpringBoot\document\room-chat.jpg)
+![群聊](.\document\room-chat.jpg)
 
 
 ####   私聊：
 
 * 点击群里的某个用户，就可以与该用户进行私聊。如果发送了私聊信息，头像会有一个点表示未读信息
 
-![私聊1](F:\space\Websocket-ChatRoom-SpringBoot\document\siliao1.jpg)
+![私聊1](.\document\siliao1.jpg)
 
-![](F:\space\Websocket-ChatRoom-SpringBoot\document\siliao2.jpg)
+![](.\document\siliao2.jpg)
 
 #### 共享文件
 
-![](F:\space\Websocket-ChatRoom-SpringBoot\document\sharefile.jpg)
+![](.\document\sharefile.jpg)
 
 #### 聊天记录查询
 
-![](F:\space\Websocket-ChatRoom-SpringBoot\document\record.jpg)
+![](.\document\record.jpg)
 
 #### 修改密码 和 修改密码（密码功能演示环境已屏蔽）
 
 **注意： 上传的文件控制在512kb内。否则后台抛出错误**
 
-![](F:\space\Websocket-ChatRoom-SpringBoot\document\head.jpg)
+![](.\document\head.jpg)
 
-#### ![](F:\space\Websocket-ChatRoom-SpringBoot\document\password.jpg)
+#### ![](.\document\password.jpg)
 
 ## 项目部署
 
