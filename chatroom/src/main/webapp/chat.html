@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Smart Chat</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Bootstrap css-->
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"
+	media="screen">
+<link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+
+<link href="css/chat.css" rel="stylesheet">
+
+<!-- Bootstrap js-->
+<script type="text/javascript" src="js/jquery.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+
+<script type="text/javascript" src="js/jquery-1.4.min.js"></script>
+<script type="text/javascript">
+	var $jq = $.noConflict(true);
+</script>
+
+<!-- 感谢网友 @水墨寒 编写的css和js文件 -->
+<link href="emoj/smohan.face.css" type="text/css" rel="stylesheet">
+<script src="emoj/smohan.face.js" charset="utf-8"></script>
+
+<script type="text/javascript" src="js/ajaxfileupload.js"></script>
+<script type="text/javascript" src="js/chat.js"></script>
+<script type="text/javascript" src="js/groupfile.js"></script>
+<script type="text/javascript" src="js/showRecords.js"></script>
+<script type="text/javascript" src="js/ucard.js"></script>
+</head>
+
+<body onLoad="startWebSocket()">
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="navbar navbar-fixed-top">
+				<div class="navbar-inner">
+					<div class="container">
+					    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        					<span class="icon-bar"></span>
+        					<span class="icon-bar"></span>
+        					<span class="icon-bar"></span>
+      					</a>
+						<a class="brand">Smart Chat beta</a>
+						<div class="nav-collapse collapse">
+							<ul class="nav">
+								<li id="li1" class="active"><a href="javascript:void(0)" onclick="closeSpan()">聊天室</a></li>
+								<li id="li2"><a href="javascript:void(0)" onclick="groupFile()">共享文件</a></li>
+								<li class="dropdown">
+							      <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" onclick="$('#li2').attr('class','');$('#li1').attr('class','');">
+							       	  个人中心 <b class="caret"></b>
+							      </a>
+					      <ul class="dropdown-menu">
+					         <li><a href="javascript:void(0)" onclick="showVcard()">更改头像</a></li>
+					         <li class="divider"></li>
+					         <li><a href="javascript:void(0)" onclick="showPWDPanel()">更换密码</a></li>
+					      </ul>
+							   </li>
+							   <li><a href="#myModal" data-toggle="modal">注销</a></li>
+							</ul>
+						</div>
+						<p class="navbar-text pull-right" id="Label_username"></p>
+					</div>
+				</div>
+			</div>
+			<div class="modal hide fade" id="myModal">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3>提示</h3>
+				</div>
+				<div class="modal-body">
+					<p>确定要注销当前用户吗？</p>
+				</div>
+				<div class="modal-footer">
+					<a href="#" class="btn btn-primary" onclick="logout()">确定</a>
+					<a href="#" class="btn" data-dismiss="modal">取消</a> 
+				</div>
+			</div>
+		</div>
+		<div class="row-fluid maincontent" style="padding-top:40px">
+			<div class="span2 offset1">
+				<legend>在线</legend><input type="text" id="search" placeholder="搜索" onkeyup="search()" onchange="search()"/><a href="javascript:void(0)" onclick="search()"><i class="icon-search"></i></a>
+				<div id="userlist">
+					<div style='width:70px;height:35px;margin:0 auto;'><img src='img/codeman.jpg' onclick='chat(0)'></div>
+					<div class="div_name" id ="user0">群聊</div><br>
+				</div>
+			</div>
+			<div class="span7" id="board">
+				<div class="row">
+					<legend id="nowchat">群聊</legend>
+					<form class="form-message" id="form">
+						<fieldset>
+							<div id="first"></div>
+						</fieldset>
+					</form>
+				</div>
+				<div class="row">
+					<div id="Smohan_FaceBox">
+						<p id="extra">
+							<a href="javascript:void(0)" class="face" title="表情" ></a>
+							<a href="javascript:void(0)" id="imagePanel" class="image_btn" title="图片"><img src="img/picture.png"/>
+								<input type="file" id="choose_image" name="image"/></a>
+							<a href="javascript:void(0)" class="rec_btn" title="聊天记录" onclick="showRec()" id="rec"><img src="img/records.ico"/></a>
+							<a href="javascript:void(0)" class="rec_btn" title="微信消息" onclick="WeChat()" id="wechat"><img src="img/wechat.ico"/></a>
+						</p>
+						<div>
+							<textarea rows="2" id="newmessage" placeholder="快来冒个泡吧~"
+								onkeydown="keySend(event)" class="smohan_text"></textarea>
+						</div>
+						<button class="btn  btn-success" onclick="sendMessage()" id="send">
+							<i class="icon-comment icon-white"></i> 发送
+						</button>
+						<code id="sendkey">Ctrl+Enter键发送</code>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<!--更换头像面板-->
+	<div class="modal hide fade" id="vcard">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3>更换头像</h3>
+		</div>
+		<img id="head_old" src="img/head_fail.png" style="width: 100px;height: 100px; padding: 20px;">	
+		<img id="head_new" src="img/head_fail.png" style="width: 100px;height: 100px; padding: 20px;"/>
+		<input type="file" id="chooseHeadImg" name="image"/>
+		<div class="modal-footer">
+			<a href="javascript:void(0)" class="btn btn-primary" onclick="changeHeadImg()">确定</a>
+			<a href="javascript:void(0)" class="btn" data-dismiss="modal" onclick="cancleChangeHead()">取消</a> 
+		</div>
+	</div>
+	
+	<!--更改密码面板-->
+	<div class="modal hide fade" data-backdrop="static" data-keyboard="false" id="edit_pwd">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3>更改密码</h3>
+		</div>
+		<div id="psws">
+      		<input type="password" id="pwd" placeholder="原密码" onclick="reset()"/><br>
+  			<input type="password" id="pwd1" placeholder="新密码" onclick="reset()"/><br>
+  			<input type="password" id="pwd2" placeholder="再次密码" onclick="reset()"/><br>
+  			<div style="width:220px" id="div_errormsg2" onclick="reset()"></div>
+  		</div>
+		<div class="modal-footer">
+			<a href="javascript:void(0)" class="btn btn-primary" onclick="changePwd()">确定</a>
+			<a href="javascript:void(0)" class="btn" data-dismiss="modal">取消</a> 
+		</div>
+	</div>
+	<div id="edit_pwd_success" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  		<div class="modal-header">
+    		<h3>修改成功</h3>
+  		</div>
+  		<div class="modal-body">
+    		<p>密码修改成功，请重新登录！</p>
+  		</div>
+  		<div class="modal-footer">
+    		<button class="btn btn-primary" onclick="logout()">确定</button>
+  		</div>
+	</div>
+	
+	<!-- 提示框 -->
+	<div id="tips" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">x</button>
+			<h3 id="tipsHeader">提示</h3>
+		</div>
+		<div class="modal-body">
+			<p id="tipsContent"></p>
+		</div>
+	</div>
+	<!-- 超管提示框 -->
+	<div id="supertips" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">x</button>
+			<h3 id="superHeader">提示</h3>
+		</div>
+		<div class="modal-body">
+			<p id="superContent"></p>
+		</div>
+	</div>
+</html>

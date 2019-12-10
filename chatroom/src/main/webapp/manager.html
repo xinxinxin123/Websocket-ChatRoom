@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>管理页面</title>
+
+ <style type="text/css">
+  *{
+  	margin: 0px;
+  	
+  	padding: 0px;
+  
+  }
+  
+  #mainDiv{
+  	width: 1200px;
+  	height: 580px;
+  	margin:10px auto;
+   
+  
+  }
+  
+  
+  #topDiv{
+  	width: 1200px;
+  	height: 100px;
+  	margin-bottom:4px;
+    border-width: 1px;
+    
+    border-style: solid;
+  }
+  
+  #leftDiv{
+  	width: 170px;
+  	height: 490px;
+    border-width: 1px;
+    border-style: solid;    
+    float: left;
+  }
+  
+  #rightDiv{
+    width: 1020px;
+  	height: 490px;
+    border-width: 1px;
+    border-style: solid; 	
+    margin-left:4px;
+    
+    margin-bottom:4px;
+    float: right;
+  
+  }
+  
+  
+  #bottomDiv{
+    width: 1200px;
+  	height: 50px;
+    border-width: 1px;
+    border-style: solid; 	
+    clear: both;
+    
+    
+  
+  }
+  </style>
+  </head>
+  
+  <body>
+    <div id = "mainDiv">
+         
+    	<div id = "topDiv">
+    	   <iframe  src="html/top.html" width="1200px" height="100px" frameborder="0"></iframe>
+    	
+    	</div>
+        <div id="leftDiv">
+        
+           <iframe  src="html/left.html" width="170px" height="490px" frameborder="0"></iframe>
+        </div>
+        
+        <div id="rightDiv">
+        	<iframe  src="html/content.html" width="1020" height="490px" frameborder="0" name="right"></iframe>
+        
+        </div>
+        <div id="bottomDiv">
+           <iframe  src="html/bottom.html" width="1200px" height="50px" frameborder="0"></iframe>
+        
+        </div>    
+    </div>
+  </body>
+</html>
+

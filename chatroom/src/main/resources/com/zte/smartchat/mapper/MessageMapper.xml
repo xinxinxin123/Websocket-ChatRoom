@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zte.smartchat.mapper.MessageMapper" >
+  <resultMap id="BaseResultMap" type="com.zte.smartchat.entity.Message" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="STAFF_ID" property="staffId" jdbcType="INTEGER" />
+    <result column="CREATED_DT" property="createdDt" jdbcType="TIMESTAMP" />
+    <result column="TYPE" property="type" jdbcType="CHAR" />
+    <result column="TARGET_ID" property="targetId" jdbcType="INTEGER" />
+    <result column="EXTRA" property="extra" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ForeResultMap" type="com.zte.smartchat.entity.MessageToFore" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="STAFF_ID" property="staffId" jdbcType="INTEGER" />
+    <result column="CREATED_DT" property="createdDt" jdbcType="TIMESTAMP" />
+    <result column="TYPE" property="type" jdbcType="CHAR" />
+    <result column="TARGET_ID" property="targetId" jdbcType="INTEGER" />
+    <result column="EXTRA" property="extra" jdbcType="VARCHAR" />
+    <result column="NAME" property="staffName" jdbcType="VARCHAR" />
+    <result column="HEAD_URL" property="headUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, CONTENT, STAFF_ID, CREATED_DT, TYPE, TARGET_ID, EXTRA
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from message
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from message
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+  	<![CDATA[delete from message where ID in]]>
+  	<foreach collection="list" item = "messages_id" open="(" separator="," close=")">
+  		#{ messages_id,jdbcType=INTEGER}
+  	</foreach>
+  </delete>
+  <insert id="insert" parameterType="com.zte.smartchat.entity.Message" >
+    insert into message (ID, CONTENT, STAFF_ID, 
+      CREATED_DT, TYPE, TARGET_ID, 
+      EXTRA)
+    values (#{id,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{staffId,jdbcType=INTEGER}, 
+      #{createdDt,jdbcType=TIMESTAMP}, #{type,jdbcType=CHAR}, #{targetId,jdbcType=INTEGER}, 
+      #{extra,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zte.smartchat.entity.Message" >
+    insert into message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="staffId != null" >
+        STAFF_ID,
+      </if>
+      <if test="createdDt != null" >
+        CREATED_DT,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="targetId != null" >
+        TARGET_ID,
+      </if>
+      <if test="extra != null" >
+        EXTRA,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="staffId != null" >
+        #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="createdDt != null" >
+        #{createdDt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="targetId != null" >
+        #{targetId,jdbcType=INTEGER},
+      </if>
+      <if test="extra != null" >
+        #{extra,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zte.smartchat.entity.Message" >
+    update message
+    <set >
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="staffId != null" >
+        STAFF_ID = #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="createdDt != null" >
+        CREATED_DT = #{createdDt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=CHAR},
+      </if>
+      <if test="targetId != null" >
+        TARGET_ID = #{targetId,jdbcType=INTEGER},
+      </if>
+      <if test="extra != null" >
+        EXTRA = #{extra,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zte.smartchat.entity.Message" >
+    update message
+    set CONTENT = #{content,jdbcType=VARCHAR},
+      STAFF_ID = #{staffId,jdbcType=INTEGER},
+      CREATED_DT = #{createdDt,jdbcType=TIMESTAMP},
+      TYPE = #{type,jdbcType=CHAR},
+      TARGET_ID = #{targetId,jdbcType=INTEGER},
+      EXTRA = #{extra,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <select id="selectPrivateTop10" resultMap="ForeResultMap" parameterType="java.util.Map" >
+  	<!-- select top 10 * from message where 1=1 order by CREATED_DT DESC; -->
+  	select m.*, s.name, s.head_url from message m, staff s
+  	where m.staff_id = s.id and m.target_Id in (#{targetId,jdbcType=INTEGER}, #{staffId,jdbcType=INTEGER}) 
+  	and m.staff_id in (#{targetId,jdbcType=INTEGER}, #{staffId,jdbcType=INTEGER})
+  	order by m.CREATED_DT DESC limit 10;
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+  	select * from message where 1= 1;
+  </select>
+  
+   <select id="selectPublicTop10" resultMap="ForeResultMap">
+  	<!-- select top 10 * from message where 1=1 order by CREATED_DT DESC; -->
+  	select m.*, s.name, s.head_url from message m, staff s
+  	where m.staff_id = s.id and m.target_id = 0
+  	order by m.CREATED_DT DESC limit 10;
+  </select>
+  
+  <!-- 取出群聊文本消息记录前n条; -->
+  <select id="selectPublicNormal" resultMap="ForeResultMap" parameterType="java.lang.Integer">
+  	select m.*, s.name, s.head_url from message m, staff s
+  	where m.staff_id = s.id and m.target_id = 0 and m.type in ('N', 'W')
+  	order by m.CREATED_DT DESC limit #{number,jdbcType=INTEGER};
+  </select>
+  
+  <!-- 取出私聊文本消息记录前n条; -->
+  <select id="selectPrivateNormal" resultMap="ForeResultMap" parameterType="java.util.Map">
+  	select m.*, s.name, s.head_url from message m, staff s
+  	where m.staff_id = s.id and s.id = #{staffId,jdbcType=INTEGER} and m.target_id = #{targetId,jdbcType=INTEGER} and m.type = 'N'
+  	order by m.CREATED_DT DESC limit #{number,jdbcType=INTEGER};
+  </select>
+  <select id="selectRecords" resultMap="ForeResultMap">
+  	<!-- select all records from message where 1=1 order by CREATED_DT DESC; -->
+  	select m.*, s.name, s.head_url from message m, staff s
+  	where m.staff_id = s.id and m.target_id = 0
+  	order by m.CREATED_DT DESC limit 100;
+  </select>
+  <select id="selectPrivateRecords" resultMap="ForeResultMap" parameterType="java.lang.Integer">
+  	<!-- select all records from message where 1=1 order by CREATED_DT DESC; -->
+  	select m.*, s.name, s.head_url from message m, staff s
+  	where m.staff_id = s.id and m.target_Id in (#{targetId,jdbcType=INTEGER}, #{staffId,jdbcType=INTEGER}) 
+  	and m.staff_id in (#{targetId,jdbcType=INTEGER}, #{staffId,jdbcType=INTEGER})
+  	order by m.CREATED_DT DESC limit 100;
+  </select>
+  <select id="selectRecords300" resultMap="ForeResultMap" parameterType="java.lang.Integer">
+  	select m.*, s.name from message m, staff s
+  	where m.staff_id = s.id
+  	order by m.CREATED_DT DESC limit 300;
+  </select>
+</mapper>

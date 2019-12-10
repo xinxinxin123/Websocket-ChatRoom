@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>所有用户</title>
+<script type="text/javascript" src="../../js/jquery.js"></script>
+<style type="text/css">
+	tr{
+  		text-align: center;
+  	}
+  	table {
+		border-style: solid;
+		border-width: 1px;
+		border-color: black;
+    }
+    
+    td{
+        border-top-style: solid;
+		border-top-width: 1px;
+		border-top-color: black;
+		
+        border-bottom-style: solid;
+		border-bottom-width: 1px;
+		border-bottom-color: black;
+		
+		border-left-style: solid;
+		border-left-width: 1px;
+		border-left-color: black;
+		
+		border-right-style: solid;
+		border-right-width: 1px;
+		border-right-color: black;
+    
+    }
+    
+  
+    button{
+    	
+    	position: relative;
+    	left: 60px;
+    	right: 30px;
+    }
+  
+	</style>
+	
+  </head>
+  <body>
+  
+  <script type="text/javascript">
+  		var persons;
+		window.onload = function(){
+			
+			$.ajax({
+ 			type:"post",
+ 			//请求servlet的url
+ 			url:"../../manageServlet?tag=select",
+ 			async:true,
+ 			//获取执行成功后的数据
+ 			complete:function(data){
+ 				//$("#list").html('');
+ 				persons = eval("("+data.responseText+")");
+ 				//persons = eval("("+data+")");
+ 				//persons = parseObj(data);
+ 				//persons = JSON.parse(data);
+ 				//persons = JSON.stringify(data);
+ 				var tab = "";
+	  			for(var i in persons){
+	
+					tab += "<tr class="+ persons[i].id +" ondblclick=" + "\"pass(" + persons[i].id +")\" onclick =" + "\"change2White(" + persons[i].id +")\" ><td>" 
+					+ persons[i].name + "</td><td>"+ persons[i].code + "</td><td>" + persons[i].pwd
+					+ "</td><td>" + persons[i].state + "</td><td>"+ persons[i].power + "</td></tr>";
+				}
+				$("tbody").append(tab);
+ 			}
+ 			});
+		}
+		
+		
+		//往隐藏的label中传值	
+  		function pass(num){
+  			//alert(num);
+  			//document.getElementById("hiddenBtn").val(count);
+  			$("."+num).css("background-color", "#D6D6FF");
+  			document.getElementById("hiddenLabel").setAttribute("value",num) ;
+  		}
+  		
+  		//行双击后取消  变为白色
+  		function change2White(num){
+  			$("."+num).css("background-color", "#FFFFFF");
+  		}
+	
+		function modifyPerson() {
+			var staff_id = document.getElementById("hiddenLabel").getAttribute("value");
+			//alert(staff_id);
+			if(null != staff_id){
+				location.href = "../modify/modifyPerson.html?id="+ staff_id;
+			}else{
+				alert("您并没有选择所要修改的用户！");
+				//window.location.reload(); 
+			}
+			
+			
+	
+		}
+
+		function deletePerson() {
+			var staff_id = document.getElementById("hiddenLabel").getAttribute("value");
+			//alert("确定删除该用户吗?");
+			//staff_id 为所要删除的员工id
+			if(null != staff_id){
+				$.ajax({
+	 			type:"post",
+	 			//请求servlet的url
+	 			data:{staff_id:staff_id},
+	 			url:"../../manageServlet?tag=delete",
+	 			async:true,
+	 			//获取执行成功后的数据
+	 			complete:function(data){
+	 				alert("删除成功！")
+				    window.location.reload(); 
+	 			}
+	 			});
+			}else{
+				alert("您并没有选择所要删除的用户！");
+				//window.location.reload(); 
+			}
+
+		}
+
+		function addPerson() {
+			location.href="../add/addPerson.html";
+		}
+		
+	</script>
+	
+     <table  width="500px" align="center" >
+            <caption>当前用户列表</caption>
+     		<thead>
+     			<!-- 表头 -->
+     			<tr>
+     				<th>姓名</th>
+     				<th>工号</th>
+     				<th>密码</th>
+     				<th>当前状态</th>
+     				<th>是否为管理员</th>
+     			</tr>
+     		</thead>
+     		
+     		
+     		<tbody>
+     			<!-- 表体  -->
+     		   <!-- 
+     		    <tr class="5" onclick="pass(5)" ondblclick="change2White(5)" >
+     				<td>肥嘟嘟</td>
+     				<td>1</td>
+     				<td>1</td>
+     				<td>在用</td>
+     			    <td>N</td>
+     			</tr>
+     	
+     		    -->
+   
+
+     		</tbody>
+                  
+     </table>
+     <div style="position: absolute;left:200px;">
+	     <button onclick="modifyPerson()">修改</button>
+	     <button onclick="deletePerson()">删除</button>
+	     <button onclick="addPerson()">增加</button>
+     </div>
+     <!-- 隐藏按钮 显示id -->
+     <label id="hiddenLabel" style="display:none" ></label>
+  </body>
+</html>

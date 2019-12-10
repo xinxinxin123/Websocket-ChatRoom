@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>Code Man聊天平台</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap -->
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"
+	media="screen">
+<link rel="stylesheet" type="text/css"
+	href="bootstrap/css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" type="text/css" href="css/login.css" />
+<script src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.4.min.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
+</head>
+<body>
+	<div>
+		<div class="form-signin" id="login">
+			<h2 class="form-signin-heading" align="center">SmartChat</h2>
+			<div class="input-prepend">
+      			<span class="add-on"><i class="icon-user"></i></span>
+      			<input class="span2" type="text" id="username" placeholder="工号" onfocus="reset()"  >
+    		</div><br>
+    		<div class="input-prepend">
+      			<span class="add-on"><i class="icon-lock"></i></span>
+      			<input class="span2" type="password" id="pwd" placeholder="密码" onfocus="reset()" >
+    		</div>
+			<div style="position: relative;" id="div_errormsg"></div>
+			<div id="btns" style="float: center;">
+				<button class="btn btn-large btn-primary" id="regbtn" onclick="reg()">注册</button>
+				<button class="btn btn-large btn-primary" id="loginbtn" onclick="login()">登录</button>
+			</div>
+			
+		</div>
+	</div>
+	<div style="position: relative;">
+		<p style="color: #F5F5F5;" align="center">
+			友情链接：<a style="color: #F5F5F5;" href="http://www.ztesoft.com/">中兴软创科技股份有限公司</a>
+		</p>
+	</div>
+</body>
+</html>

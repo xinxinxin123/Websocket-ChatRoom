@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>添加用户</title>
+<script type="text/javascript" src="../../js/jquery.js"></script>
+<style type="text/css">
+    .td_style{
+	    text-align: right;
+	}
+</style>
+<script type="text/javascript">
+
+	$(document).ready(function() {
+		$("#code").focus(function() {
+			$("#code").css("background-color", "#F5F5F5");
+		});
+		$("#username").focus(function() {
+			$("#username").css("background-color", "#F5F5F5");
+		});
+		$("#pwd").focus(function() {
+			$("#pwd").css("background-color", "#F5F5F5");
+		});
+		$("#state").focus(function() {
+			$("#state").css("background-color", "#F5F5F5");
+		});
+		$("#isAdminister").focus(function() {
+			$("#isAdminister").css("background-color", "#F5F5F5");
+		});
+		//离开焦点
+		$("#code").blur(function() {
+			$("#code").css("background-color","#D6D6FF");
+		//	alert($("#code").val());
+			if("" == $("#code").val()){
+				alert("工号不能为空！");
+			}
+		});
+		$("#username").blur(function() {
+			$("#username").css("background-color","#D6D6FF");
+			if("" == $("#username").val()){
+				alert("姓名不能为空！");
+			}
+			
+		});
+		$("#pwd").blur(function() {
+			$("#pwd").css("background-color","#D6D6FF");
+			if("" == $("#pwd").val()){
+				alert("密码不能为空！");
+			}
+		});
+		$("#state").blur(function() {
+			$("#state").css("background-color","#D6D6FF");
+			if("" == $("#state").val()){
+				alert("使用状态不能为空！");
+			}
+		});
+		
+		$("#isAdminister").blur(function() {
+			$("#isAdminister").css("background-color","#D6D6FF");
+			if("" == $("#isAdminister").val()){
+				alert("使用权限不能为空（Y/N）！");
+			}
+		});
+		
+	});
+</script>
+</head>
+<body>
+   <script type="text/javascript">
+   	function insertPerson(){
+	  var code = document.getElementById("code").value;
+	  var username = document.getElementById("username").value;
+	  username = encodeURI(username); 
+		 var pwd = document.getElementById("pwd").value;
+		 var state = document.getElementById("state").selectedIndex;
+		 if(state==0){
+			 state="A";
+		 }else if(state==1){
+			 state="I";
+		 }else if(state==2){
+			 state="x";
+		 }
+		 var isAdminister = document.getElementById("isAdminister").selectedIndex;
+		 if(isAdminister==0){
+			 isAdminister="N";
+		 }else if(isAdminister==1){
+			 isAdminister="S";
+		 }
+	   	 var obj = {
+	   			"code":code,
+	   			"username":username,
+	   			"pwd":pwd,
+	   			"state":state,
+	   			"isAdminister":isAdminister
+	   	 }
+		// var url = "http://localhost:8080/SmartChat/allStaffServlet?tag=insert&code="+code+"&username="+username+"&pwd="+pwd+"&state="+state+"&isAdminister="+isAdminister+";
+	   	 $.ajax({
+				type:"post",
+				//请求servlet的url
+				url: "../../manageServlet?tag=insert",
+				data:obj,
+				async:true,
+				//获取执行成功后的数据
+				complete:function(data){
+					//alert("ok");
+					self.location.href="../detail/showPersonDetail.html";
+				}
+	   	 }); 
+	    }
+   </script>
+   	   <table >
+   	   	   <caption style="color: #808080;font-size: 30px">增加用户信息</caption>
+   	   	   <tr>
+   	   	   	   <td class="td_style">工号：</td>
+   	   	   	   <td><input type="text" name="code" id="code"></td>
+   	   	   </tr>
+   	   	   <tr>
+   	   	   	   <td class="td_style">姓名：</td>
+   	   	   	   <td><input type="text" name="username" id="username"></td>
+   	   	   </tr>
+   	   	   <tr>
+   	   	   	   <td class="td_style">密码：</td>
+   	   	   	   <td><input type="password" name="pwd" id="pwd" ></td>
+   	   	   </tr>
+		   <tr>
+   	   	   	   <td class="td_style">当前状态：</td>
+   	   	   	   <td>
+   	   	   	   	   <select name="state" id="state">
+   	   	   	   	   	   <option>在用</option>
+   	   	   	   	   	   <option>停用</option>
+   	   	   	   	   	   <option>禁言</option>
+   	   	   	       </select>
+   	   	   	   </td>
+   	   	   </tr>
+   	   	   <tr>
+   	   	   	   <td class="td_style">是否为管理员：</td>
+   	   	   	   <td>
+   	   	   	   	   <select name="isAdminister" id="isAdminister">
+   	   	   	   	       <option>Normal</option>
+   	   	   	   	   	   <option>Super</option>
+   	   	   	   	   	   
+   	   	   	       </select>
+   	   	   	   </td>
+   	   	   </tr>
+   	   </table>
+   	   <button onclick="insertPerson()" style="position: absolute;left:100px;">确认</button>
+   	   <!-- <input style="position: absolute;left:200px;" type = "reset" value="重置" /> -->
+   
+   
+   
+</body>
+</html>
