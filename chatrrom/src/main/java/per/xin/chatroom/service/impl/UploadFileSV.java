@@ -12,8 +12,6 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-
 
 import org.apache.tomcat.util.http.fileupload.FileItem;
 import org.apache.tomcat.util.http.fileupload.FileItemFactory;
@@ -160,13 +158,13 @@ public class UploadFileSV {
 		FileItem fileItem = null;
 		FileItemFactory factory = new DiskFileItemFactory();
 		ServletFileUpload fileUpload = new ServletFileUpload(factory);
-		fileUpload.setFileSizeMax(1024*1024*10);
+		fileUpload.setFileSizeMax(1024*512); // 最大512kb
 		try {
 			List<FileItem> fileItems = fileUpload.parseRequest(new ServletRequestContext(request));
 			for(FileItem item: fileItems){
 				fileItem = item;
 			}
-		}catch(FileUploadBase.FileSizeLimitExceededException e){
+		}catch(FileUploadBase.FileSizeLimitExceededException e){ // TODO 图片太大给出提示
 			logger.error("文件太大！", e);
 		}catch (FileUploadException e ) {
 			logger.error("parse rquest failed", e);

@@ -23,19 +23,12 @@ function startWebSocket() {
 	// TODO cookie
 	/*var usercookie = getCookie("username");
 	if(null != usercookie && "\"\"" != usercookie){
-		var localhost = "localhost:8080";
-//		var localhost = "10.45.2.33:8080";
-//		var localhost = "ulong.tunnel.qydev.com:80";
-
-
-		
 	}
 	else{
 		logout("logout");
 	}*/
 
-    //var localhost = "121.43.182.154:7010"; //TODO 此处不能写死
-    var localhost = "localhost:7010"; //TODO 此处不能写死
+    var localhost = window.location.host;
 
     if ('WebSocket' in window) {
         try {
